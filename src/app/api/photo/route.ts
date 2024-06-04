@@ -57,6 +57,8 @@ function iteratorToStream(iterator: AsyncIterator<string>) {
 
 export async function POST(request: Request) {
   try {
+    console.log("POST request received");
+
     const body = await request.json();
     const bodySchema = z.object({
       text: z.string(),
@@ -64,6 +66,8 @@ export async function POST(request: Request) {
     });
 
     const { text, imageBase64 } = bodySchema.parse(body);
+
+    console.log(`text: ${text}`);
 
     const iterator = makeIterator(text, imageBase64);
     const stream = iteratorToStream(iterator);
