@@ -69,11 +69,17 @@ export async function POST(request: Request) {
     return new Response(stream);
   } catch (error: unknown) {
     if (error instanceof Error) {
-      return new Response(error.message, { status: 400 });
+      return new Response(error.message, {
+        status: 400,
+        statusText: error.message,
+      });
     } else if (typeof error === "string") {
-      return new Response(error, { status: 400 });
+      return new Response(error, { status: 400, statusText: error });
     } else {
-      return new Response("Unknown error", { status: 400 });
+      return new Response("Unknown error", {
+        status: 400,
+        statusText: "Unknown error",
+      });
     }
   }
 }
