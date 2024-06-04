@@ -86,5 +86,5 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
-  return new Response("GET request is not supported", { status: 400 });
+  return new Response("API Server is up. GET request is not supported");
 }
