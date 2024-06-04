@@ -82,6 +82,8 @@ export async function POST(request: Request) {
       message = error;
     }
 
+    console.error(message);
+
     return new Response(message, {
       status: 400,
       statusText: "Bad Request",
