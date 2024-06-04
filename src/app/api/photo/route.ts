@@ -6,15 +6,14 @@ export const dynamic = "force-dynamic"; // static by default, unless reading the
 const openai = new OpenAI();
 
 async function* makeIterator(text: string, imageBase64: string) {
-  // Prepare the payload
-  const payload = {
+  const stream = await openai.chat.completions.create({
     model: "gpt-4o",
     messages: [
       { role: "system", content: "You are a helpful assistant." },
       {
         role: "user",
         content: [
-          { type: "text", content: text },
+          { type: "text", text },
           {
             type: "image_url",
             image_url: {
@@ -25,11 +24,6 @@ async function* makeIterator(text: string, imageBase64: string) {
       },
     ],
 
-    stream: true,
-  };
-  const stream = await openai.chat.completions.create({
-    messages: [{ role: "system", content: "You are a helpful assistant." }],
-    model: "gpt-3.5-turbo",
     stream: true,
   });
 
