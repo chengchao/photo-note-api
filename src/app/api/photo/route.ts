@@ -1,6 +1,8 @@
 import OpenAI from "openai";
 import { z } from "zod";
 
+export const dynamic = "force-dynamic"; // static by default, unless reading the request
+
 const openai = new OpenAI();
 
 async function* makeIterator(text: string, imageBase64: string) {
