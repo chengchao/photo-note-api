@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 import { z } from "zod";
 
-export const runtime = "edge";
+export const maxDuration = 50;
 
 export const dynamic = "force-dynamic"; // static by default, unless reading the request
 
