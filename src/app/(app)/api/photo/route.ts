@@ -1,5 +1,7 @@
 import OpenAI from "openai";
 import { z } from "zod";
+import { getPayloadHMR } from "@payloadcms/next/utilities";
+import configPromise from "@payload-config";
 
 export const maxDuration = 50;
 
@@ -20,6 +22,7 @@ async function* makeIterator(text: string, imageBase64: string) {
             type: "image_url",
             image_url: {
               url: `data:image/jpeg;base64,${imageBase64}`,
+              detail: "low",
             },
           },
         ],
@@ -57,13 +60,22 @@ export async function POST(request: Request) {
 
     const body = await request.json();
     const bodySchema = z.object({
-      text: z.string(),
       imageBase64: z.string(),
     });
 
-    const { text, imageBase64 } = bodySchema.parse(body);
+    const payload = await getPayloadHMR({ config: configPromise });
 
-    console.log(`text: ${text}`);
+    const data = await payload.find({
+      collection: "prompts",
+      where: {
+        title: { equals: "image-description" },
+      },
+      limit: 1,
+    });
+    const text =
+      data.docs.at(0)?.prompt ?? "Please say 'Something went wrong.'";
+
+    const { imageBase64 } = bodySchema.parse(body);
 
     const iterator = makeIterator(text, imageBase64);
     const stream = iteratorToStream(iterator);
